@@ -1,51 +1,58 @@
 
-$(document).ready(function() {
+$(document).ready(function () {
 
-var food = ["tacos", "steak", "fried chicken", "pizza", "cheeseburger", "burrito", "ham", "eggs", "cereal", "avacado", "ribs"];
+  var food = ["tacos", "steak", "fried chicken", "pizza", "cheeseburger", "burrito", "ham", "eggs", "cereal", "avacado", "ribs"];
 
-//Render buttons
-var renderButtons = function() {
+  //Render buttons
+  var renderButtons = function () {
 
-  $("#button-section").empty();
+    $("#button-section").empty();
 
-  for (var f = 0; f < food.length; f++) {
-    var btn = $("<button class=btn-warning>");
-    console.log(f);
-    btn.addClass("button-section");
-    btn.attr("data-name", food[f]);
-    btn.text(food[f]);
-    $("#button-section").append(btn);
+    for (var f = 0; f < food.length; f++) {
+      var btn = $("<button class=btn-warning>");
+      console.log(f);
+      btn.addClass("button-section");
+      btn.attr("data-name", food[f]);
+      btn.text(food[f]);
+      $("#button-section").append(btn);
+    }
   }
-}
 
-$("#add-food").on("click", function(event) {
-  event.preventDefault();
-  var newFood = $("#food-input").val().trim();
-  food.push(newFood);
+  $("#add-food").on("click", function (event) {
+    event.preventDefault();
+    var newFood = $("#food-input").val().trim();
+    food.push(newFood);
+    renderButtons();
+    console.log(newFood);
+  });
+  
   renderButtons();
-  console.log(newFood);
-});
 
-// $(document).on("click", "btn-warning button-section", displayFoodinfo)
+  $("button").on("click", function () {
+    var foodButton = $(this).attr("data-name");
+    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+      foodButton + "&api_key=iNBuquivThBrVl4b2CknATIpDfO17Ash&limit=10";
 
-renderButtons();
+  // Performing an AJAX request with the queryURL
+  $.ajax({
+    url: queryURL,
+    method: "GET"
+    })
+      .then(function (response) {
+      // console.log(queryURL);
+      console.log(response);
+      var results = response.data;
 
-// $("button").on("click", function() {
-//     var newFood = $(this).attr("data-newFood");
-//     var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
-//       newFood + "&api_key=iNBuquivThBrVl4b2CknATIpDfO17Ash&limit=10";
-
-//     // Performing an AJAX request with the queryURL
-//     $.ajax({
-//       url: queryURL,
-//       method: "GET"
-//     }).then(function(response) {
-
-//       var gifDiv = $("<div class='gif'>")
-
-//       var rating = response.Rated;
-
-//       var pOne = $("<p>").text("Rating: " + rating);
-//     });
-
-});
+      for (var i = 0; i < results.length; i++) {
+        var foodDiv = $("<div>");
+        var p = $("<p>").text("Rating: " + results[i].rating);
+        var foodImage = $("<img>");
+        foodImage.attr("src", results[i].images.fixed_height.url);
+        foodDiv.append(p);
+        foodDiv.append(foodImage);
+        
+        $("#gifs-section").prepend(foodDiv);
+      }
+    });
+  });
+});  
