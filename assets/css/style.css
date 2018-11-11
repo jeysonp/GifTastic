@@ -1,0 +1,19 @@
+*{
+    box-sizing: border-box;
+}
+
+.container {
+    width: 90%;
+    align-self: auto;
+}
+
+.btn-warning {
+    border: solid orangered;
+    border-radius: 2px;
+    margin: 5px;
+
+}
+
+#add-food {
+background-color: orangered;
+}
