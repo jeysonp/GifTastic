@@ -26,6 +26,7 @@ $(document).ready(function () {
     console.log(newFood);
   });
   
+  // $(document).on("click", ".btn-warning button-section", ????);
   renderButtons();
 
   $("button").on("click", function () {
